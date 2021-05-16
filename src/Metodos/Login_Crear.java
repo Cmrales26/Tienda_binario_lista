@@ -5,13 +5,16 @@
  */
 package Metodos;
 
-import static Metodos.Productos.ruta;
+import Frames.InterfazAdmin;
+import Frames.Interfaz_usuario;
+import Frames.Login;
 import Objetos.Usuario;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
+import java.io.Serializable;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -19,39 +22,105 @@ import java.util.ArrayList;
  */
 
 public class Login_Crear {
-    
-   public static final String ruta = "./clientes.bin";
-   
-   public static boolean guardarUsuario(ArrayList<Usuario> usuario){
-       try {
-           FileOutputStream objeto = new FileOutputStream(ruta);
-           ObjectOutputStream ob = new ObjectOutputStream(objeto);
-           ob.writeObject(usuario);
-           ob.close();
-           objeto.close();
-           return true;
-       } catch (Exception e) {
-           e.printStackTrace();
-           return false;
-       }
-   }
-   
-   public static ArrayList<Usuario> obtener_cliente(){
-       try {
-            FileInputStream objeto = new FileInputStream(ruta);
-            ObjectInputStream obin = new ObjectInputStream(objeto);
-            
-            ArrayList<Usuario> u = (ArrayList<Usuario>)obin.readObject();
-            
+
+    public static final String ruta = "./clientes.bin";
+    private Nodo_persona raiz;
+    FileOutputStream objeto = null;
+    ObjectOutputStream ob = null;
+    FileInputStream is = null;
+    ObjectInputStream obin = null;
+    String ID;
+    String usuario;
+    String tipo;
+  
+
+    public Login_Crear() {
+        raiz = Obtener_nodo_usuario();
+    }
+
+    public boolean guardar_nodo_usuario(String usuario, String nombre, String apellido, String email, String contrasena, String telefono, String id) {
+        Nodo_persona nodo;
+        nodo = new Nodo_persona();
+        Usuario cl = new Usuario(usuario, nombre, apellido, email, contrasena, telefono, id, "cliente");
+        nodo.usuario = cl;
+        try {
+            if (!Validar_existencia(cl)) {
+                if (raiz == null) {
+                    nodo.siguiente = null;
+                } else {
+                    nodo.siguiente = raiz;
+                }
+                raiz = nodo;
+                objeto = new FileOutputStream(ruta);
+                ob = new ObjectOutputStream(objeto);
+                ob.writeObject(nodo);
+                ob.close();
+                objeto.close();
+                JOptionPane.showMessageDialog(null, "El usuario se guardo");
+                return true;
+            } else {
+                JOptionPane.showMessageDialog(null, "El usuario Ya existe");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+    }
+
+    public boolean Validar_existencia(Usuario cliente) {
+        Nodo_persona nodo;
+        nodo = raiz;
+        while (nodo != null) {
+            if (cliente.getUsuario().equalsIgnoreCase(nodo.usuario.getUsuario())
+                    || cliente.getNumeroIdentificacion().equalsIgnoreCase(nodo.usuario.getNumeroIdentificacion())) {
+                return true;
+            }
+            nodo = nodo.siguiente;
+        }
+        return false;
+    }
+
+    public Nodo_persona Obtener_nodo_usuario() {
+        try {
+            is = new FileInputStream(ruta);
+            obin = new ObjectInputStream(is);
+            Nodo_persona nodo = (Nodo_persona) obin.readObject();
+            is.close();
             obin.close();
-            objeto.close();
+            return nodo;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    //INGRESAR 
+    public boolean Validar_existencia_ingresar(Usuario cliente) {
+        Nodo_persona nodo;
+        boolean existe = false;
+        nodo = raiz;
+        while (nodo != null) {
+            if (cliente.getUsuario().equalsIgnoreCase(nodo.usuario.getUsuario())
+                    && cliente.getContrasena().equalsIgnoreCase(nodo.usuario.getContrasena())) {
+                ID = nodo.usuario.getNumeroIdentificacion();
+                tipo = nodo.usuario.getTipo_Usuario();
+                usuario = cliente.getUsuario();
+                existe = true;
+            }
+            nodo = nodo.siguiente;
+        }
+        if (existe == true && tipo.equalsIgnoreCase("cliente")) {
             
-            return u;
-            
-       } catch (Exception e) {
-           e.printStackTrace();
-           return null;
-       }
-   }
-   
+            Interfaz_usuario iu = new Interfaz_usuario(usuario, ID);
+            iu.setVisible(true);
+        }else if(existe == true && tipo.equalsIgnoreCase("admin")) {
+            InterfazAdmin ia = new InterfazAdmin();
+            ia.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(null, "El usuario No se encuentra Registrado");
+        }
+        return false;
+    }
 }

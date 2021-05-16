@@ -6,10 +6,8 @@
 package Frames;
 
 import Metodos.Login_Crear;
-import static Metodos.Login_Crear.*;
-import Objetos.Usuario;
+import Metodos.Nodo_persona;
 import java.awt.Color;
-import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,15 +16,37 @@ import javax.swing.JOptionPane;
  */
 public class Crear_cuenta extends javax.swing.JFrame {
 
-    Login_Crear lg = new Login_Crear();
-
-    ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+    Login_Crear lg;
+    Nodo_persona nodo_cliente;
 
     public Crear_cuenta() {
         initComponents();
         this.setLocationRelativeTo(this);
         jPanel2.setBackground(Color.WHITE);
-        usuarios = obtener_cliente();
+        lg = new Login_Crear();
+        nodo_cliente = lg.Obtener_nodo_usuario();
+    }
+
+    public void crear_cuenta_nodo() {
+        String usuario = txtuser.getText();
+        String nombre = txtnombre.getText();
+        String apellido = txtapellido.getText();
+        String email = txtmail.getText();
+        String contraseña = txtpass.getText();
+        String numerotelefono = txttelefono.getText();
+        String numid = txtidentificacion.getText();
+
+        if (!usuario.equals("") && !txtnombre.getText().equals("") && !txtapellido.getText().equals("")
+                && !txtmail.getText().equals("") && !txttelefono.getText().equals("") && !txtidentificacion.getText().equals("")
+                && !txtpass.getText().equals("")) {
+            lg.guardar_nodo_usuario(usuario, nombre, apellido, email, contraseña, numerotelefono, numid);
+            this.dispose();
+            Login lg_f = new Login();
+            lg_f.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(this, "Se encuentra algun espacio en blanco");
+        }
+
     }
 
     void limpiar() {
@@ -37,42 +57,6 @@ public class Crear_cuenta extends javax.swing.JFrame {
         txtpass.setText("");
         txttelefono.setText("");
         txtidentificacion.setText("");
-    }
-
-    void crear_cuenta() {
-        boolean existe = false;
-        String usuario = txtuser.getText();
-        String Id = txtidentificacion.getText();
-
-        for (Usuario us : usuarios) {
-            if (us.getUsuario().equalsIgnoreCase(usuario) || us.getNumeroIdentificacion().equals(Id)) {
-                existe = true;
-            }
-        }
-        if (!usuario.equals("") && !txtnombre.getText().equals("") && !txtapellido.getText().equals("") && 
-                !txtmail.getText().equals("") && !txttelefono.getText().equals("") &&!txtidentificacion.getText().equals("") &&
-                !txtpass.getText().equals("")) {
-            if (existe) {
-                JOptionPane.showMessageDialog(this, "El usuario: " + usuario + " O la identificación: " + Id
-                        + "Ya se encuentran registradas, Por favor ingrese una nueva");
-            } else {
-                Usuario usr = new Usuario(txtuser.getText(), txtnombre.getText(), txtapellido.getText(), txtmail.getText(),
-                        txtpass.getText(), txttelefono.getText(), txtidentificacion.getText(), "Cliente");
-                usuarios.add(usr);
-                if (guardarUsuario(usuarios)) {
-                    JOptionPane.showMessageDialog(this, "Usuario Guardado");
-                    this.dispose();
-                    Login lg_interfaz = new Login();
-                    lg_interfaz.setVisible(true);
-                    limpiar();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Ocurrio un error al Guardar el Usuario");
-                }
-            }
-        }else{
-            JOptionPane.showMessageDialog(this, "Se encuentrar Usuarios Vacios");
-        }
-
     }
 
     @SuppressWarnings("unchecked")
@@ -431,7 +415,7 @@ public class Crear_cuenta extends javax.swing.JFrame {
     }//GEN-LAST:event_txtidentificacionActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        crear_cuenta();
+        crear_cuenta_nodo();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

@@ -32,7 +32,7 @@ public class Modificar_cuenta extends javax.swing.JFrame {
         this.setLocationRelativeTo(this);
         ID = id;
         txtidentificacion.setEditable(false);
-        usuarios = obtener_cliente();
+//        usuarios = obtener_cliente();
         if (usuarios != null) {
             for (Usuario u : usuarios) {
                 if (u.getNumeroIdentificacion().equals(ID)) {
@@ -316,11 +316,11 @@ public class Modificar_cuenta extends javax.swing.JFrame {
                                 u.setNumeroIdentificacion(ID);
                             }
                         }
-                        if (guardarUsuario(usuarios)) {
-                            JOptionPane.showMessageDialog(this, "EL Usuario Se ha actualizado con Exito");
-                        } else {
-                            JOptionPane.showMessageDialog(this, "Ha Ocurrido Un error al Actualizar el Usuario");
-                        }
+//                        if (guardarUsuario(usuarios)) {
+//                            JOptionPane.showMessageDialog(this, "EL Usuario Se ha actualizado con Exito");
+//                        } else {
+//                            JOptionPane.showMessageDialog(this, "Ha Ocurrido Un error al Actualizar el Usuario");
+//                        }
 
                         this.dispose();
                         Interfaz_usuario ia = new Interfaz_usuario(usuario_nuevo, ID);

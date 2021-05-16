@@ -1,0 +1,14 @@
+1-El usuario debe ingresar al sistema con usuario y contraseña. Si el usuario no existe, debe crear un usuario. Los datos que se deben guardar 
+del usuario son: Número de identificación, Nombre, apellido, teléfono y correo electrónico. El número de identificación no se puede repetir. 
+El usuario podrá modificar su información. Debe haber un usuario administrador. Este usuario debe estar por defecto en la aplicación 
+(ya creado) y debe tener como usuario admin y como contraseña admin. (1/5)
+
+2-Se deben poder crear y modificar productos solamente por el usuario administrador. Los datos del producto son, código, nombre y precio. 
+El código del producto no se puede repetir. El producto se puede editar. (1/5)
+
+3-Un cliente puede crear un pedido, seleccionado el o los productos que quiere y la cantidad. El pedido debe guardar un consecutivo, 
+una fecha, quien lo hizo, además del o los productos que se escogieron y las cantidades. El pedido se puede editar, agregando, modificando 
+o eliminando productos asociados a este. (2/5)
+
+4-El usuario puede ver la lista de sus pedidos, mostrando los datos de este pedido. Solo el usuario administrador puede ver la lista de 
+todos los pedidos que han sido almacenados. (1/5)
