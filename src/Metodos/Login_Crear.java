@@ -8,6 +8,7 @@ package Metodos;
 import Frames.InterfazAdmin;
 import Frames.Interfaz_usuario;
 import Frames.Login;
+import Frames.Modificar_cuenta;
 import Objetos.Usuario;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -20,7 +21,6 @@ import javax.swing.JOptionPane;
  *
  * @author Camilo && Diana
  */
-
 public class Login_Crear {
 
     public static final String ruta = "./clientes.bin";
@@ -32,7 +32,11 @@ public class Login_Crear {
     String ID;
     String usuario;
     String tipo;
-  
+    String nombre;
+    String apellido;
+    String mail;
+    String contraseña;
+    String numero_de_telefono;
 
     public Login_Crear() {
         raiz = Obtener_nodo_usuario();
@@ -112,15 +116,45 @@ public class Login_Crear {
             nodo = nodo.siguiente;
         }
         if (existe == true && tipo.equalsIgnoreCase("cliente")) {
-            
+
             Interfaz_usuario iu = new Interfaz_usuario(usuario, ID);
             iu.setVisible(true);
-        }else if(existe == true && tipo.equalsIgnoreCase("admin")) {
+        } else if (existe == true && tipo.equalsIgnoreCase("admin")) {
             InterfazAdmin ia = new InterfazAdmin();
             ia.setVisible(true);
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "El usuario No se encuentra Registrado");
         }
         return false;
+    }
+//    MODIFICAR CUENTA
+
+    public void Obtener_Modificar(Usuario cliente) {
+        Nodo_persona nodo;
+        boolean encontrado = false;
+        nodo = raiz;
+        while (nodo != null) {
+            if (cliente.getNumeroIdentificacion().equalsIgnoreCase(nodo.usuario.getNumeroIdentificacion())) {
+                usuario = nodo.usuario.getUsuario();
+                nombre = nodo.usuario.getNombre();
+                apellido = nodo.usuario.getApellido();
+                mail = nodo.usuario.getEmail();
+                contraseña = nodo.usuario.getContrasena();
+                numero_de_telefono = nodo.usuario.getNumeroTelefonico();
+                ID = nodo.usuario.getNumeroIdentificacion();
+                encontrado = true;
+            }
+            nodo = nodo.siguiente;
+        }
+        if (encontrado == true) {
+            Modificar_cuenta mc = new Modificar_cuenta(ID, usuario, nombre, apellido, mail, contraseña, numero_de_telefono);
+            mc.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(null, "UN ERROR HA OCURRIDO CON EXITO");
+        }
+    }
+    
+    public void modificar(){
+        
     }
 }

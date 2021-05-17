@@ -11,7 +11,9 @@ import Objetos.Producto;
 import java.util.*;
 import static Metodos.Productos.*;
 import static Metodos.Agregar_Carrito_al_archivo.*;
+import Metodos.Login_Crear;
 import Objetos.Compras;
+import Objetos.Usuario;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -31,6 +33,7 @@ public class Interfaz_usuario extends javax.swing.JFrame {
 
     DefaultTableModel dtm;
     DefaultTableModel dtm_historial;
+    Login_Crear lg = new Login_Crear();
     String usuario, id;
     int numero_pedido;
     int consecutivo_final;
@@ -708,8 +711,8 @@ public class Interfaz_usuario extends javax.swing.JFrame {
                 JOptionPane.QUESTION_MESSAGE, null, botones, botones[0]);
         switch (Mensaje) {
             case 0:
-                Modificar_cuenta mc = new Modificar_cuenta(jTableCarrito.getValueAt(0, 7).toString());
-                mc.setVisible(true);
+                Usuario us = new Usuario("","","", "", "", "", jTableCarrito.getValueAt(0, 7).toString(), "");
+                lg.Obtener_Modificar(us);
                 this.dispose();
                 break;
             case 1:
