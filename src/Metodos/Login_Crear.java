@@ -116,11 +116,16 @@ public class Login_Crear {
             nodo = nodo.siguiente;
         }
         if (existe == true && tipo.equalsIgnoreCase("cliente")) {
-
+            JOptionPane.showMessageDialog(null, "Bienvenido: " + usuario + " Ha ingresado como: " + tipo);
+            Login lg = new Login();
+            lg.setVisible(false);
             Interfaz_usuario iu = new Interfaz_usuario(usuario, ID);
             iu.setVisible(true);
         } else if (existe == true && tipo.equalsIgnoreCase("admin")) {
-            InterfazAdmin ia = new InterfazAdmin();
+            Login lg = new Login();
+            lg.setVisible(false);
+            JOptionPane.showMessageDialog(null, "Bienvenido: " + usuario + " Ha ingresado como: " + tipo);
+            InterfazAdmin ia = new InterfazAdmin("","","");
             ia.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(null, "El usuario No se encuentra Registrado");
@@ -149,12 +154,8 @@ public class Login_Crear {
         if (encontrado == true) {
             Modificar_cuenta mc = new Modificar_cuenta(ID, usuario, nombre, apellido, mail, contraseña, numero_de_telefono);
             mc.setVisible(true);
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "UN ERROR HA OCURRIDO CON EXITO");
         }
-    }
-    
-    public void modificar(){
-        
     }
 }

@@ -5,17 +5,13 @@
  */
 package Metodos;
 
+import Frames.InterfazAdmin;
 import Objetos.Producto;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Vector;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -24,37 +20,91 @@ import java.util.Vector;
 public class Productos {
 
     public static final String ruta = "./productos.bin";
+    private Nodo_Productos raiz;
+    FileOutputStream objeto = null;
+    ObjectOutputStream ob = null;
+    FileInputStream is = null;
+    ObjectInputStream obin = null;
+    String nombre;
+    String precio;
+    String codigo;
 
-    public static boolean guardarProductos(ArrayList<Producto> producto) {
+    public Productos() {
+        raiz = null;
+    }
+
+    public boolean guardar_nodo_producto(String nombre, String precio, String codigo) {
+        Nodo_Productos nodo;
+        nodo = new Nodo_Productos();
+        Producto pr = new Producto(nombre, precio, codigo);
+        nodo.productos = pr;
         try {
-            FileOutputStream objeto = new FileOutputStream(ruta);
-            ObjectOutputStream ob = new ObjectOutputStream(objeto);
-            ob.writeObject(producto);
-            ob.close();
-            objeto.close();
-            return true;
-
+            if (!validar_existencia(pr)) {
+                if (raiz == null) {
+                    nodo.siguiente = null;
+                } else {
+                    nodo.siguiente = raiz;
+                }
+                raiz = nodo;
+                raiz = nodo;
+                objeto = new FileOutputStream(ruta);
+                ob = new ObjectOutputStream(objeto);
+                ob.writeObject(nodo);
+                ob.close();
+                objeto.close();
+                JOptionPane.showMessageDialog(null, "Se ha guardado el producto");
+                return true;
+            } else {
+                JOptionPane.showMessageDialog(null, "El producto ya se encuentra registrado");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
+        return false;
     }
 
-    public static ArrayList<Producto> obtener_productos() {
+    public boolean validar_existencia(Producto productos) {
+        Nodo_Productos nodo;
+        nodo = raiz;
+        while (nodo != null) {
+            if (productos.getCodigo().equals(nodo.productos.getCodigo())) {
+                return true;
+            }
+            nodo = nodo.siguiente;
+        }
+        return false;
+    }
+    public Nodo_Productos obtener_nodo_productos(){
         try {
-            FileInputStream objeto = new FileInputStream(ruta);
-            ObjectInputStream obin = new ObjectInputStream(objeto);
-
-            ArrayList<Producto> e = (ArrayList<Producto>)obin.readObject();
-
+            is = new FileInputStream(ruta);
+            obin = new ObjectInputStream(is);
+            Nodo_Productos nodo = (Nodo_Productos) obin.readObject();
+            is.close();
             obin.close();
-            objeto.close();
-
-            return e;
-
+            return nodo;
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
         }
+        return null;
+    }
+    
+    public void obtener_productos(){
+        Nodo_Productos nodo;
+        boolean encontrado =false;
+        nodo = raiz;
+        while(nodo != null){
+            nombre = nodo.productos.getProducto();
+            precio = nodo.productos.getPrecio();
+            codigo = nodo.productos.getCodigo();
+            encontrado = true;
+            nodo = nodo.siguiente;
+        }
+        if (encontrado == true) {
+            InterfazAdmin ia = new InterfazAdmin(nombre, precio, codigo);
+        }else{
+            JOptionPane.showMessageDialog(null, "error");
+        }
+        
     }
 }

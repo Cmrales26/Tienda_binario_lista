@@ -7,6 +7,8 @@ package Frames;
 
 import static Metodos.Productos.*;
 import static Metodos.Agregar_Carrito_al_archivo.*;
+import Metodos.Nodo_Productos;
+import Metodos.Productos;
 import Objetos.Compras;
 import Objetos.Producto;
 import java.awt.Color;
@@ -28,12 +30,13 @@ public class InterfazAdmin extends javax.swing.JFrame {
     Login lg = new Login();
     DefaultTableModel dtm;
     DefaultTableModel dtmtwo;
+    Productos pd = new Productos();
+    Nodo_Productos nodo_Productos;
+    String nombre, precio, codigo;
     int filas;
-    ArrayList<Producto> productos = new ArrayList<Producto>();
-    ArrayList<Compras> compras = new ArrayList<Compras>();
-    //Solucion en esta interfaz
 
-    public InterfazAdmin() {
+    //Solucion en esta interfaz
+    public InterfazAdmin(String nombre, String precio, String codigo) {
         initComponents();
         jPanel3.setBackground(Color.WHITE);
         btnmodifikr.setVisible(false);
@@ -42,29 +45,33 @@ public class InterfazAdmin extends javax.swing.JFrame {
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.setLocationRelativeTo(this);
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        //dtmtwo = new DefaultTableModel(20, 7);
+        nodo_Productos = pd.obtener_nodo_productos();
+        pd.obtener_productos();
+        this.precio = precio;
+        this.nombre = nombre;
+        this.codigo = codigo;
+
         String titu[] = new String[]{"No.Pedido", "Fecha de compra", "Codigo", "Producto", "Cantidad de productos",
             "Precio Total", "Cliente", "Id del cliente"};
 
         dtmtwo = new DefaultTableModel(titu, 0);
         jTablehistorial.setModel(dtmtwo);
-        
-        compras = obtener_compras();
-        if (productos != null) {
-            for (Compras com : compras) {
-                Vector vc = obj_vector_compras(com);
-
-                dtmtwo.addRow(vc);
-            }
-        }
-
+//        
+//        compras = obtener_compras();
+//        if (productos != null) {
+//            for (Compras com : compras) {
+//                Vector vc = obj_vector_compras(com);
+//
+//                dtmtwo.addRow(vc);
+//            }
+//        }
         jTablehistorial.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
         jTablehistorial.getColumnModel().getColumn(0).setPreferredWidth(48);
         jTablehistorial.getColumnModel().getColumn(1).setPreferredWidth(100);
         jTablehistorial.getColumnModel().getColumn(2).setPreferredWidth(30);
         jTablehistorial.getColumnModel().getColumn(3).setPreferredWidth(80);
         jTablehistorial.getColumnModel().getColumn(4).setPreferredWidth(115);
-        
+
         String titulos[] = new String[]{
             "Nombre",
             "Precio",
@@ -72,35 +79,12 @@ public class InterfazAdmin extends javax.swing.JFrame {
         };
         dtm = new DefaultTableModel(titulos, 0);
         jTableproductos.setModel(dtm);
-
-        productos = obtener_productos();
-        if (productos != null) {
-            for (Producto e : productos) {
-                Vector v = obj_vector(e);
-
-                dtm.addRow(v);
-            }
-        }
-    }
-
-    public Vector obj_vector(Producto e) {
-        Vector v = new Vector();
-        v.add(e.getProducto());
-        v.add(e.getPrecio());
-        v.add(e.getCodigo());
-        return v;
-    }
-    public Vector obj_vector_compras(Compras c){
-        Vector vc = new Vector();
-        vc.add(c.getNo_pedido());
-        vc.add(c.getFecha_de_compra());
-        vc.add(c.getCodigo_Producto());
-        vc.add(c.getProducto());
-        vc.add(c.getCantidad_de_productos());
-        vc.add(c.getPrecio_Total());
-        vc.add(c.getCliente());
-        vc.add(c.getId_Cliente());
-        return vc;
+        Vector productos = new Vector();
+        productos.add(this.nombre);
+        productos.add(this.precio);
+        productos.add(this.codigo);
+        dtm.addRow(productos);
+        nodo_Productos = pd.obtener_nodo_productos();
     }
 
     void limpiar() {
@@ -111,27 +95,9 @@ public class InterfazAdmin extends javax.swing.JFrame {
 
     void guardar() {
         boolean existe = false;
-        String codigo = txtcodigoproducto.getText();
+        String codigo = txtcodigoproducto.getText(), nombre = txtnombreproducto.getText(), precio = txtprecioproducto.getText();
+        pd.guardar_nodo_producto(nombre, precio, codigo);
 
-        for (Producto prd : productos) {
-            if (prd.getCodigo().equals(codigo)) {
-                existe = true;
-            }
-        }
-
-        if (existe) {
-            JOptionPane.showMessageDialog(this, "El codigo: " + txtcodigoproducto.getText() + " Ya se ecuentra registrado, Porfavor ingrese un nuevo codigo");
-        } else {
-            Producto pr = new Producto(txtnombreproducto.getText(), txtprecioproducto.getText(), txtcodigoproducto.getText());
-            productos.add(pr);
-            if (guardarProductos(productos)) {
-                dtm.addRow(obj_vector(pr));
-                JOptionPane.showMessageDialog(this, "El producto ha sido guardado");
-                limpiar();
-            } else {
-                JOptionPane.showMessageDialog(this, "Ha ocurrido un error a la hora de guardar el producto");
-            }
-        }
     }
 
     void modicar_producto() {
@@ -146,19 +112,16 @@ public class InterfazAdmin extends javax.swing.JFrame {
                     jTableproductos.setValueAt(txtnombreproducto.getText(), fila, 0);
                     jTableproductos.setValueAt(txtprecioproducto.getText(), fila, 1);
                     jTableproductos.setValueAt(txtcodigoproducto.getText(), fila, 2);
-
-                    productos.get(fila).setProducto(txtnombreproducto.getText());
-                    productos.get(fila).setPrecio(txtprecioproducto.getText());
-                    productos.get(fila).setCodigo(txtcodigoproducto.getText());
-
-                    if (guardarProductos(productos)) {
-                        JOptionPane.showMessageDialog(this, "El producto ha sido guardado");
-                        limpiar();
-                        txtcodigoproducto.setEditable(true);
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Ha ocurrido un error a la hora de guardar el producto");
-                    }
-
+//                    productos.get(fila).setProducto(txtnombreproducto.getText());
+//                    productos.get(fila).setPrecio(txtprecioproducto.getText());
+//                    productos.get(fila).setCodigo(txtcodigoproducto.getText());
+//                    if (guardarProductos(productos)) {
+//                        JOptionPane.showMessageDialog(this, "El producto ha sido guardado");
+//                        limpiar();
+//                        txtcodigoproducto.setEditable(true);
+//                    } else {
+//                        JOptionPane.showMessageDialog(this, "Ha ocurrido un error a la hora de guardar el producto");
+//                    }
                     break;
                 case 1:
                     JOptionPane.showConfirmDialog(this, "No se han realizado cambios en el producto");

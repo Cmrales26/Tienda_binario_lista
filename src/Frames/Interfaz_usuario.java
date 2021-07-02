@@ -97,7 +97,7 @@ public class Interfaz_usuario extends javax.swing.JFrame {
         jTableCarrito.setValueAt(Fecha, 0, 1); // Agrega la fecha
 
         compras = obtener_compras();
-        productos = obtener_productos();
+//        productos = obtener_productos();
         if (productos != null) {
             for (Producto p : productos) {
                 jComboproductos.addItem(p.getProducto());

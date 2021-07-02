@@ -10,13 +10,16 @@ import static Metodos.Login_Crear.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import static Frames.Interfaz_usuario.*;
+import Metodos.Login_Crear;
+import Metodos.Nodo_persona;
+import java.io.Serializable;
 
 /**
  *
  * @author Camilo && Diana
  */
-public class Modificar_cuenta extends javax.swing.JFrame {
-    
+public class Modificar_cuenta extends javax.swing.JFrame implements Serializable{
+
     public static String ID;
     final String usuario_viejo;
     String usuario;
@@ -25,20 +28,22 @@ public class Modificar_cuenta extends javax.swing.JFrame {
     String nombre;
     String mail;
     String contraseña;
+    Login_Crear lg = new Login_Crear();
+    Nodo_persona nodo_cliente;
 
     public Modificar_cuenta(String id, String usuario, String nombre, String apellido, String mail, String contraseña, String numero_de_telefono) {
         initComponents();
         this.setLocationRelativeTo(this);
         txtidentificacion.setText(ID = id);
-        txtuser.setText(this.usuario=usuario);
-        txtnombre.setText(this.nombre= nombre);
+        txtuser.setText(this.usuario = usuario);
+        txtnombre.setText(this.nombre = nombre);
         txtapellido.setText(this.apellido = apellido);
         txtmail.setText(this.mail = mail);
         txtpass.setText(this.contraseña = contraseña);
         txttelefono.setText(this.numero_de_telefono = numero_de_telefono);
         txtidentificacion.setEditable(false);
-//        usuarios = obtener_cliente();
         usuario_viejo = txtuser.getText();
+        nodo_cliente = lg.Obtener_nodo_usuario();
     }
 
     @SuppressWarnings("unchecked")
@@ -266,68 +271,13 @@ public class Modificar_cuenta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnactualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnactualizarActionPerformed
-//        String usuario_nuevo = txtuser.getText();
-//        String apellido_nuevo = txtapellido.getText();
-//        String numero_de_telefono_nuevo = txttelefono.getText();
-//        String nombre_nuevo = txtnombre.getText();
-//        String mail_nuevo = txtmail.getText();
-//        String contraseña_nuevo = txtpass.getText();
-//        boolean existe = false;
-//        for (Usuario us : usuarios) {
-//            if (us.getUsuario().equalsIgnoreCase(usuario_nuevo) && !usuario_nuevo.equals(usuario_viejo)) {
-//                existe = true;
-//            }
-//        }
-//
-//        int modificar = JOptionPane.showConfirmDialog(this, "Está seguro que desea realizar los cambios", "Modificar datos",
-//                JOptionPane.YES_NO_CANCEL_OPTION);
-//        switch (modificar) {
-//            case 0:
-//                if (existe) {
-//                    JOptionPane.showMessageDialog(this, "El usuario: " + usuario_nuevo + " Ya se encuentra Registrado");
-//                    txtuser.setText(usuario_viejo);
-//                } else {
-//                    if (!txtuser.getText().equals("") && !txtnombre.getText().equals("") && !txtapellido.getText().equals("")
-//                            && !txtmail.getText().equals("") && !txtidentificacion.getText().equals("") && 
-//                            !txttelefono.getText().equals("") && !txtpass.getText().equals("")) {
-//                        JOptionPane.showMessageDialog(this, "Sus datos se han actializado correctamente");
-//                        for (Usuario u : usuarios) {
-//                            if (u.getNumeroIdentificacion().equals(ID)) {
-//                                u.setUsuario(usuario_nuevo);
-//                                u.setNombre(nombre_nuevo);
-//                                u.setApellido(apellido_nuevo);
-//                                u.setEmail(mail_nuevo);
-//                                u.setContrasena(contraseña_nuevo);
-//                                u.setNumeroTelefonico(numero_de_telefono_nuevo);
-//                                u.setNumeroIdentificacion(ID);
-//                            }
-//                        }
-////                        if (guardarUsuario(usuarios)) {
-////                            JOptionPane.showMessageDialog(this, "EL Usuario Se ha actualizado con Exito");
-////                        } else {
-////                            JOptionPane.showMessageDialog(this, "Ha Ocurrido Un error al Actualizar el Usuario");
-////                        }
-//
-//                        this.dispose();
-//                        Interfaz_usuario ia = new Interfaz_usuario(usuario_nuevo, ID);
-//                        ia.setVisible(true);
-//                    } else {
-//                        JOptionPane.showMessageDialog(this, "Se encuentran espacios en blanco");
-//                    }
-//                }
-//                break;
-//            case 1:
-//                JOptionPane.showMessageDialog(this, "Puede seguir realizando sus cambios");
-//                 txtuser.setText(usuario_viejo);
-//                break;
-//            case 2:
-//                this.dispose();
-//                Interfaz_usuario ia = new Interfaz_usuario(usuario_viejo, ID);
-//                ia.setVisible(true);
-//                break;
-//            default:
-//                break;
-//        }
+        String usuario_nuevo = txtuser.getText();
+        String apellido_nuevo = txtapellido.getText();
+        String numero_de_telefono_nuevo = txttelefono.getText();
+        String nombre_nuevo = txtnombre.getText();
+        String mail_nuevo = txtmail.getText();
+        String contraseña_nuevo = txtpass.getText();
+        String id = txtidentificacion.getText();
     }//GEN-LAST:event_btnactualizarActionPerformed
 
     private void txtuserKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtuserKeyTyped

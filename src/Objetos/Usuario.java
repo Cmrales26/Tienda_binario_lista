@@ -22,7 +22,8 @@ public class Usuario implements Serializable{
     private String numeroIdentificacion;
     private String Tipo_Usuario;
 
-    public Usuario(String usuario, String nombre, String apellido, String email, String Contrasena, String numeroTelefonico, String numeroIdentificacion, String Tipo_Usuario) {
+    public Usuario(String usuario, String nombre, String apellido, String email, String Contrasena, 
+            String numeroTelefonico, String numeroIdentificacion, String Tipo_Usuario) {
         this.usuario = usuario;
         this.nombre = nombre;
         this.apellido = apellido;
